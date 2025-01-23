@@ -5,7 +5,11 @@ module.exports = {
     './public/index.html',             // Include your HTML files (if any)
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'spin-slow-2': 'spin 20s linear infinite',
+      },
+    },
   },
   plugins: [],
 };
