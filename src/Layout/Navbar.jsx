@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Search, Bell, Mail, User, ChevronDown } from "lucide-react";
+import {Link} from "react-router-dom";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -50,7 +51,7 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center space-x-4">
-        <div className="relative">
+        {/* <div className="relative">
           <button
             className="
             relative 
@@ -81,7 +82,7 @@ const Navbar = () => {
               3
             </span>
           </button>
-        </div>
+        </div> */}
 
         <div className="relative">
           <button
@@ -187,22 +188,9 @@ const Navbar = () => {
               >
                 Profile
               </a>
-              <a
-                href="#"
-                className="
-                block 
-                px-4 
-                py-2 
-                text-sm 
-                text-gray-700 
-                hover:bg-gray-100
-              "
-              >
-                Settings
-              </a>
               <div className="border-t border-gray-200"></div>
-              <a
-                href="#"
+              <Link
+                to="/"
                 className="
                 block 
                 px-4 
@@ -213,7 +201,7 @@ const Navbar = () => {
               "
               >
                 Logout
-              </a>
+              </Link>
             </div>
           )}
         </div>
