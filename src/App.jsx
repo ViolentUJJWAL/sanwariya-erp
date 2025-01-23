@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from "react";
+import Dashboard from "./Pages/Dashboard";
+import Layout from "./Layout/Layout";
 
-function App() {
+const App = () => {
   return (
-    <div className='bg-red-500'>
-      app
-    </div>
-  )
-}
+    <Layout>
+      <Dashboard />
+    </Layout>
+  );
+};
 
-export default App
+export default App;
