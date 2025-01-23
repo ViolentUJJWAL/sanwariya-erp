@@ -39,7 +39,7 @@ const LoginForm = () => {
           onChange={(e) => setPassword(e.target.value)}
           className="w-full p-3 mb-4 border-2 rounded-md border-orange-500 bg-white text-base focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
-        <div className='flex items-center justify-between'>
+        <div className="flex items-center justify-between">
           <button
             type="submit"
             className="w-20 py-3 bg-orange-500 text-white uppercase rounded-md hover:bg-orange-600 transition-colors duration-300"
@@ -47,7 +47,9 @@ const LoginForm = () => {
             Login
           </button>
           <p>
-            <Link to="" className="text-lg hover:underline">Forget password</Link>
+            <Link to="/forgot-password" className="text-lg hover:underline">
+              Forget password
+            </Link>
           </p>
         </div>
         <a
