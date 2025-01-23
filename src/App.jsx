@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import LoginForm from './pages/LoginForm'
 
-function App() {
+const App = () => {
   return (
     <div>
       <Routes>
@@ -12,4 +12,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
