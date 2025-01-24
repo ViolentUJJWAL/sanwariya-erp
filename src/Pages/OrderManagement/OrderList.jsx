@@ -1,36 +1,58 @@
-import React, { useState, useMemo } from 'react';
-import orders from './ordersDummyData';
-import { Search } from 'lucide-react';
+import React, { useState, useMemo } from "react";
+import orders from "./ordersDummyData";
+import { Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const OrderManagementPage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [paymentStatus, setPaymentStatus] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('');
-  const [orderStatus, setOrderStatus] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [orderStatus, setOrderStatus] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const filteredOrders = useMemo(() => {
-    return orders.filter(order => {
-      const matchSearchTerm = searchTerm.toLowerCase() === '' ||
+    return orders.filter((order) => {
+      const matchSearchTerm =
+        searchTerm.toLowerCase() === "" ||
         order.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.products[0].product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.orderTrack.location.toLowerCase().includes(searchTerm.toLowerCase());
+        order.products[0].product.title
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        order.orderTrack.location
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
 
-      const matchPaymentStatus = paymentStatus === '' || order.payment.status === paymentStatus;
-      const matchPaymentMethod = paymentMethod === '' || order.payment.method === paymentMethod;
-      const matchOrderStatus = orderStatus === '' || order.status === orderStatus;
+      const matchPaymentStatus =
+        paymentStatus === "" || order.payment.status === paymentStatus;
+      const matchPaymentMethod =
+        paymentMethod === "" || order.payment.method === paymentMethod;
+      const matchOrderStatus =
+        orderStatus === "" || order.status === orderStatus;
 
-      const matchDeliveryDate = (!startDate || new Date(order.estimatedDeliveryDate) >= new Date(startDate)) &&
-        (!endDate || new Date(order.estimatedDeliveryDate) <= new Date(endDate));
+      const matchDeliveryDate =
+        (!startDate ||
+          new Date(order.estimatedDeliveryDate) >= new Date(startDate)) &&
+        (!endDate ||
+          new Date(order.estimatedDeliveryDate) <= new Date(endDate));
 
-      return matchSearchTerm &&
+      return (
+        matchSearchTerm &&
         matchPaymentStatus &&
         matchPaymentMethod &&
         matchOrderStatus &&
-        matchDeliveryDate;
+        matchDeliveryDate
+      );
     });
-  }, [searchTerm, paymentStatus, paymentMethod, orderStatus, startDate, endDate]);
+  }, [
+    searchTerm,
+    paymentStatus,
+    paymentMethod,
+    orderStatus,
+    startDate,
+    endDate,
+  ]);
 
   return (
     <div className="container mx-auto">
@@ -38,7 +60,6 @@ const OrderManagementPage = () => {
         <h1 className="text-4xl font-bold my-4">Order Management</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-
           <div className="relative flex-grow">
             <input
               type="text"
@@ -121,33 +142,58 @@ const OrderManagementPage = () => {
             </thead>
             <tbody>
               {filteredOrders.map((order, index) => (
-                <tr key={index} className="hover:bg-orange-100">
+                <tr
+                  key={index}
+                  onClick={() => {
+                    navigate(`/orders/${index}`);
+                  }}
+                  className="hover:bg-orange-100"
+                >
                   <td className="p-2 border text-center">{index + 1}</td>
                   <td className="p-2 border">{order.user.name}</td>
-                  <td className="p-2 border">{order.products[0].product.title}</td>
-                  <td className="p-2 border text-right">₹{order.totalAmount}</td>
                   <td className="p-2 border">
-                    <span className={`
+                    {order.products[0].product.title}
+                  </td>
+                  <td className="p-2 border text-right">
+                    ₹{order.totalAmount}
+                  </td>
+                  <td className="p-2 border">
+                    <span
+                      className={`
                       px-2 py-1 rounded text-xs
-                      ${order.payment.status === 'successful' ? 'bg-green-200 text-green-800' :
-                        order.payment.status === 'pending' ? 'bg-yellow-200 text-yellow-800' :
-                          'bg-red-200 text-red-800'}
-                    `}>
+                      ${
+                        order.payment.status === "successful"
+                          ? "bg-green-200 text-green-800"
+                          : order.payment.status === "pending"
+                          ? "bg-yellow-200 text-yellow-800"
+                          : "bg-red-200 text-red-800"
+                      }
+                    `}
+                    >
                       {order.payment.status}
                     </span>
                   </td>
                   <td className="p-2 border">
-                    <span className={`
+                    <span
+                      className={`
                       px-2 py-1 rounded text-xs
-                      ${order.status === 'delivered' ? 'bg-green-200 text-green-800' :
-                        order.status === 'pending' ? 'bg-yellow-200 text-yellow-800' :
-                          order.status === 'dispatch' ? 'bg-blue-200 text-blue-800' :
-                            'bg-red-200 text-red-800'}
-                    `}>
+                      ${
+                        order.status === "delivered"
+                          ? "bg-green-200 text-green-800"
+                          : order.status === "pending"
+                          ? "bg-yellow-200 text-yellow-800"
+                          : order.status === "dispatch"
+                          ? "bg-blue-200 text-blue-800"
+                          : "bg-red-200 text-red-800"
+                      }
+                    `}
+                    >
                       {order.status}
                     </span>
                   </td>
-                  <td className="p-2 border">{new Date(order.estimatedDeliveryDate).toLocaleDateString()}</td>
+                  <td className="p-2 border">
+                    {new Date(order.estimatedDeliveryDate).toLocaleDateString()}
+                  </td>
                   <td className="p-2 border">{order.orderTrack.location}</td>
                 </tr>
               ))}
