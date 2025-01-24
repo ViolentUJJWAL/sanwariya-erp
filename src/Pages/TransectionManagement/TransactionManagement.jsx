@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import dummyPayments from './transectionData';
 import { Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const TransactionManagement = () => {
+    const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [dateRange, setDateRange] = useState({
         startDate: null,
@@ -145,8 +147,8 @@ const TransactionManagement = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredTransactions.map(transaction => (
-                            <tr key={transaction.transactionId} className="border-b hover:bg-orange-100">
+                        {filteredTransactions.map((transaction, index) => (
+                            <tr key={transaction.transactionId} onClick={()=>navigate(`/transactions/${index}`)} className="border-b hover:bg-orange-100">
                                 <td className="p-3">{`${transaction.paymentBy.fullname.firstName} ${transaction.paymentBy.fullname.lastName}`}</td>
                                 <td className="p-3">{transaction.paymentBy.email}</td>
                                 <td className="p-3">{transaction.transactionId}</td>

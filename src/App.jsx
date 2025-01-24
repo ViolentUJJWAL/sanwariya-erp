@@ -11,6 +11,8 @@ import TransactionManagement from './pages/TransectionManagement/TransactionMana
 import CustomerList from './pages/CustomerManagement/CustomerList'
 import AddProductPage from './pages/ProductManagement/AddProductPage'
 import ProfilePage from "./pages/Profile";
+import ProductDetailsPage from "./pages/ProductManagement/ProductDetailsPage";
+import TransectionDetailsPage from "./pages/TransectionManagement/TransectionDetailsPage";
 
 const App = () => {
   return (
@@ -20,9 +22,12 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
         <Route path="/dashboard" element={<Layout> <Dashboard /> </Layout>} />
         <Route path="/products" element={<Layout> <ProductListingPage /> </Layout>} />
+        <Route path="/products/:id" element={<Layout> <ProductDetailsPage /> </Layout>} />
         <Route path="/add-product" element={<Layout> <AddProductPage /> </Layout>} />
         <Route path="/orders" element={<Layout> <OrderManagementPage /> </Layout>} />
+        <Route path="/orders/:id" element={<Layout> order </Layout>} />
         <Route path="/transactions" element={<Layout> <TransactionManagement /> </Layout>} />
+        <Route path="/transactions/:id" element={<Layout> <TransectionDetailsPage /> </Layout>} />
         <Route path="/customers" element={<Layout> <CustomerList /></Layout>}/>
         <Route path="/contact-us" element={<Layout> <ContactUsAdminPanel /> </Layout>}/>
         <Route path="/profile" element={<Layout> <ProfilePage /> </Layout>}/>

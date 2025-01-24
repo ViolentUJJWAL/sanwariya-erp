@@ -236,7 +236,7 @@ const AddProductPage = () => {
               >
                 <Trash2 size={20} />
               </button>
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid md:grid-cols-3 gap-4 mr-4">
                 <input
                   type="number"
                   placeholder="Weight (grams)"

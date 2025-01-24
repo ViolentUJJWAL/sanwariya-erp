@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import orders from './ordersDummyData';
 import { Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const OrderManagementPage = () => {
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('');
   const [paymentStatus, setPaymentStatus] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
@@ -121,7 +123,7 @@ const OrderManagementPage = () => {
             </thead>
             <tbody>
               {filteredOrders.map((order, index) => (
-                <tr key={index} className="hover:bg-orange-100">
+                <tr key={index} onClick={()=>navigate(`/orders/${index}`)} className="hover:bg-orange-100">
                   <td className="p-2 border text-center">{index + 1}</td>
                   <td className="p-2 border">{order.user.name}</td>
                   <td className="p-2 border">{order.products[0].product.title}</td>

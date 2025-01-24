@@ -93,7 +93,7 @@ const ProductListingPage = () => {
             {/* Products Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {paginatedProducts.map(product => (
-                    <div key={product.title} className="flex flex-col justify-between border p-4 rounded hover:shadow-lg hover:border-orange-500" >
+                    <div onClick={()=>navigate(`/products/${product._id}`)} key={product.title} className="flex flex-col justify-between border p-4 rounded hover:shadow-lg hover:border-orange-500" >
                         <img
                             src={product.image[0]}
                             alt={product.title}
