@@ -46,7 +46,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
       label: "Contact Us",
       href: "/contact-us",
       color: "text-white-500",
-    }
+    },
   ];
 
   return (
@@ -80,9 +80,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
         border-white/10
       "
       >
-        {isOpen && (
-          <img src=".\pnglogo.png" alt="logo" className="w-36" />
-        )}
+        {isOpen && <img src=".\whitepng.png" alt="logo" className="w-36" />}
         <button
           onClick={onToggle}
           className="
