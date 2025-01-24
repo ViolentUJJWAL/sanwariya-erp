@@ -76,7 +76,7 @@ const ContactUsAdminPanel = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 bg-[#F8F5F0]">
+    <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6 text-[#D4AF37]">
         Contact Messages Admin Panel
       </h1>

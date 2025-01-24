@@ -7,6 +7,7 @@ import {
   DollarSign,
   Users,
 } from "lucide-react";
+import {Link} from "react-router-dom"
 
 const Sidebar = ({ isOpen, onToggle }) => {
   const navItems = [
@@ -43,7 +44,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
     {
       icon: MessageSquare,
       label: "Contact Us",
-      href: "#",
+      href: "/contact-us",
       color: "text-white-500",
     }
   ];
@@ -131,8 +132,8 @@ const Sidebar = ({ isOpen, onToggle }) => {
                 ${isOpen ? "px-3" : "px-2"}
               `}
             >
-              <a
-                href={item.href}
+              <Link
+                to={item.href}
                 className={`
                   flex 
                   items-center 
@@ -163,7 +164,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
                     {item.label}
                   </span>
                 )}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

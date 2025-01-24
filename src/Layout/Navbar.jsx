@@ -175,8 +175,8 @@ const Navbar = () => {
               z-50
             "
             >
-              <a
-                href="#"
+              <Link
+                to="/profile"
                 className="
                 block 
                 px-4 
@@ -187,7 +187,7 @@ const Navbar = () => {
               "
               >
                 Profile
-              </a>
+              </Link>
               <div className="border-t border-gray-200"></div>
               <Link
                 to="/"
