@@ -77,7 +77,7 @@ const ContactUsAdminPanel = () => {
 
   return (
     <div className="container mx-auto p-4 bg-[#F8F5F0]">
-      <h1 className="text-2xl font-bold mb-6 text-[#D4AF37]">
+      <h1 className="text-2xl font-bold mb-6 text-orange-500">
         Contact Messages Admin Panel
       </h1>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -88,7 +88,7 @@ const ContactUsAdminPanel = () => {
               key={message._id}
               className={`bg-white rounded-lg shadow-sm p-4 cursor-pointer transition-colors border ${
                 selectedMessage?._id === message._id
-                  ? "bg-[#E68A00] border-[#D4AF37]"
+                  ? "bg-[#E68A00] border-orange-500"
                   : "hover:bg-[#F8F5F0] border-[#6F4E37]"
               }`}
               onClick={() => handleMessageSelect(message)}
