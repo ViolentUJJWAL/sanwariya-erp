@@ -76,8 +76,8 @@ const ContactUsAdminPanel = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 bg-[#F8F5F0]">
-      <h1 className="text-2xl font-bold mb-6 text-orange-500">
+    <div className="container mx-auto">
+      <h1 className="text-4xl font-bold mb-6 text-black-500">
         Contact Messages Admin Panel
       </h1>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -94,19 +94,17 @@ const ContactUsAdminPanel = () => {
               onClick={() => handleMessageSelect(message)}
             >
               <div className="flex items-center gap-2 mb-2">
-                <User className="w-4 h-4 text-[#196F3D]" />
-                <span className="font-medium text-[#6F4E37]">
-                  {message.name}
-                </span>
+                <User className="w-4 h-4 text-orange-600" />
+                <span className="font-medium text-black">{message.name}</span>
               </div>
 
               <div className="flex items-center gap-2 text-sm text-[#6F4E37] mb-2">
-                <Mail className="w-4 h-4 text-[#196F3D]" />
+                <Mail className="w-4 h-4 text-orange-600" />
                 <span>{message.email}</span>
               </div>
 
               <div className="flex items-center gap-2 text-sm text-[#6F4E37] mb-3">
-                <Clock className="w-4 h-4 text-[#196F3D]" />
+                <Clock className="w-4 h-4 text-orange-600" />
                 <span>{formatDate(message.createdAt)}</span>
               </div>
 
@@ -122,12 +120,12 @@ const ContactUsAdminPanel = () => {
           {selectedMessage ? (
             <div className="bg-white rounded-lg shadow-lg p-6 border border-[#6F4E37]">
               <div className="mb-6">
-                <h3 className="text-xl font-semibold mb-4 text-[#D4AF37]">
+                <h3 className="text-xl font-semibold mb-4 text-orange-500">
                   Message Details
                 </h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-[#6F4E37]">
+                    <label className="block text-sm font-medium text-black">
                       From
                     </label>
                     <div className="mt-1 text-[#6F4E37]">
@@ -136,7 +134,7 @@ const ContactUsAdminPanel = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#6F4E37]">
+                    <label className="block text-sm font-medium text-black">
                       Received
                     </label>
                     <div className="mt-1 text-[#6F4E37]">
@@ -145,10 +143,10 @@ const ContactUsAdminPanel = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#6F4E37]">
+                    <label className="block text-sm font-medium text-black">
                       Message
                     </label>
-                    <div className="mt-1 p-3 bg-[#F8F5F0] rounded-md text-[#6F4E37]">
+                    <div className="mt-1 p-3 bg-orange-100 rounded-md text-[#6F4E37]">
                       {selectedMessage.message}
                     </div>
                   </div>
@@ -156,19 +154,19 @@ const ContactUsAdminPanel = () => {
               </div>
 
               <div className="mt-6">
-                <label className="block text-sm font-medium text-[#6F4E37] mb-2">
+                <label className="block text-sm font-medium text-black mb-2">
                   Response
                 </label>
                 <textarea
                   value={response}
                   onChange={(e) => setResponse(e.target.value)}
-                  className="w-full p-3 border rounded-md focus:ring-2 focus:ring-[#E68A00] focus:border-[#D4AF37] text-[#6F4E37]"
+                  className="w-full p-3 border rounded-md text-[#6F4E37]"
                   rows={6}
                   placeholder="Type your response here..."
                 />
                 <div className="mt-4 flex justify-end">
                   <button
-                    className={`px-4 py-2 bg-[#C0392B] text-white rounded-md hover:bg-[#E68A00] focus:outline-none focus:ring-2 focus:ring-[#E68A00] focus:ring-offset-2 transition-colors ${
+                    className={`text-xl ml-2 px-4 p-2 bg-orange-400 hover:bg-orange-500 text-white rounded ${
                       sending ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                     onClick={handleSendResponse}

@@ -1,12 +1,11 @@
 import React from "react";
 import {
   Home,
-  User,
-  Settings,
-  PieChart,
-  Calendar,
-  Folder,
   MessageSquare,
+  Package,
+  ListOrdered,
+  DollarSign,
+  Users,
 } from "lucide-react";
 
 const Sidebar = ({ isOpen, onToggle }) => {
@@ -14,43 +13,37 @@ const Sidebar = ({ isOpen, onToggle }) => {
     {
       icon: Home,
       label: "Dashboard",
-      href: "#",
+      href: "/dashboard",
       color: "text-white-500",
     },
     {
-      icon: PieChart,
-      label: "Analytics",
-      href: "#",
+      icon: Package,
+      label: "Products",
+      href: "/products",
       color: "text-white-500",
     },
     {
-      icon: User,
-      label: "Profile",
-      href: "#",
+      icon: ListOrdered,
+      label: "Orders",
+      href: "/orders",
       color: "text-white-500",
     },
     {
-      icon: Folder,
-      label: "Projects",
-      href: "#",
+      icon: DollarSign,
+      label: "Transection",
+      href: "/transactions",
       color: "text-white-500",
     },
     {
-      icon: Calendar,
-      label: "Calendar",
-      href: "#",
+      icon: Users,
+      label: "Customers",
+      href: "/customers",
       color: "text-white-500",
     },
     {
       icon: MessageSquare,
-      label: "Messages",
-      href: "#",
-      color: "text-white-500",
-    },
-    {
-      icon: Settings,
-      label: "Settings",
-      href: "#",
+      label: "Contact Us",
+      href: "/contact-us",
       color: "text-white-500",
     },
   ];
@@ -63,8 +56,8 @@ const Sidebar = ({ isOpen, onToggle }) => {
       left-0 
       h-full 
       bg-gradient-to-b 
-      from-[#8d5b3a] 
-      to-orange-500 
+      to-[#8d5b3a] 
+      from-orange-500 
       text-white 
       transition-all 
       duration-300 
@@ -86,20 +79,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
         border-white/10
       "
       >
-        {isOpen && (
-          <div
-            className="
-            text-xl 
-            font-bold 
-            tracking-wider 
-            text-white/90 
-            flex-grow 
-            text-left
-          "
-          >
-            Dhazia
-          </div>
-        )}
+        {isOpen && <img src=".\whitepng.png" alt="logo" className="w-36" />}
         <button
           onClick={onToggle}
           className="

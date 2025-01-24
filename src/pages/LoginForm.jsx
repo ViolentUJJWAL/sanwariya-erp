@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Add login logic here
-    console.log("Login attempted", { email, password });
+    console.log('Login attempted', { email, password });
+    navigate('/dashboard');
   };
 
   return (
@@ -52,7 +53,7 @@ const LoginForm = () => {
           </p>
         </div>
         <a
-          href="#"
+          href="/"
           target="_blank"
           rel="noopener noreferrer"
           className="absolute bottom-4 right-4 text-sm hover:text-gray-900 hover:underline transition-colors"
