@@ -5,12 +5,13 @@ import Layout from "./Layout/Layout";
 import Dashboard from "./Pages/Dashboard";
 import ForgotPasswordForm from "./Pages/ForgotPasswordForm";
 import ContactUsAdminPanel from "./Pages/ContactUsAdminPanel";
-import ProductListingPage from './pages/ProductManagement/ProductListing'
-import OrderManagementPage from './pages/OrderManagement/OrderList'
-import TransactionManagement from './pages/TransectionManagement/TransactionManagement'
-import CustomerList from './pages/CustomerManagement/CustomerList'
-import AddProductPage from './pages/ProductManagement/AddProductPage'
+import ProductListingPage from "./pages/ProductManagement/ProductListing";
+import OrderManagementPage from "./pages/OrderManagement/OrderList";
+import TransactionManagement from "./pages/TransectionManagement/TransactionManagement";
+import CustomerList from "./pages/CustomerManagement/CustomerList";
+import AddProductPage from "./pages/ProductManagement/AddProductPage";
 import ProfilePage from "./pages/Profile";
+import OrderDetails from "./Pages/OrderManagement/OrderDetails";
 import ProductDetailsPage from "./pages/ProductManagement/ProductDetailsPage";
 import TransectionDetailsPage from "./pages/TransectionManagement/TransectionDetailsPage";
 
