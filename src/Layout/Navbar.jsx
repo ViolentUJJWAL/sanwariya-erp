@@ -10,10 +10,11 @@ const Navbar = () => {
       className="
       bg-white 
       shadow-md 
+      h-20
       px-6 py-2 
       flex items-center 
       justify-between 
-      border-b border-gray-200
+      border-b-4 border-orange-500
     "
     >
       <div className="flex items-center space-x-4 w-full max-w-md">

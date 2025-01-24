@@ -72,11 +72,12 @@ const Sidebar = ({ isOpen, onToggle }) => {
       <div
         className="
         flex 
+        h-20
         items-center 
         justify-between 
         px-6 
         py-5 
-        border-b 
+        border-b-4 
         border-white/10
       "
       >
