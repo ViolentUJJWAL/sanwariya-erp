@@ -14,6 +14,7 @@ import ProfilePage from "./pages/Profile";
 import OrderDetails from "./Pages/OrderManagement/OrderDetails";
 import ProductDetailsPage from "./pages/ProductManagement/ProductDetailsPage";
 import TransectionDetailsPage from "./pages/TransectionManagement/TransectionDetailsPage";
+import OrderPage2 from "./pages/OrderManagement/OrderList2";
 
 const App = () => {
   return (
@@ -25,7 +26,8 @@ const App = () => {
         <Route path="/products" element={<Layout> <ProductListingPage /> </Layout>} />
         <Route path="/products/:id" element={<Layout> <ProductDetailsPage /> </Layout>} />
         <Route path="/add-product" element={<Layout> <AddProductPage /> </Layout>} />
-        <Route path="/orders" element={<Layout> <OrderManagementPage /> </Layout>} />
+        {/* <Route path="/orders" element={<Layout> <OrderManagementPage /> </Layout>} /> */}
+        <Route path="/orders" element={<Layout> <OrderPage2 /> </Layout>} />
         <Route path="/orders/:id" element={<Layout> <OrderDetails/> </Layout>} />
         <Route path="/transactions" element={<Layout> <TransactionManagement /> </Layout>} />
         <Route path="/transactions/:id" element={<Layout> <TransectionDetailsPage /> </Layout>} />

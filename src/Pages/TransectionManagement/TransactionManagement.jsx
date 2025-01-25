@@ -125,9 +125,9 @@ const TransactionManagement = () => {
                 {Object.entries(revenues).map(([period, revenue]) => (
                     <div key={period} className="bg-white p-4 rounded shadow hover:shadow-md hover:ring-2 hover:ring-orange-500 hover:bg-orange-50">
                         <h3 className="font-semibold capitalize">{period} Revenue</h3>
-                        <p>Online: ${revenue.online}</p>
-                        <p>Cash: ${revenue.cash}</p>
-                        <p>Total: ${revenue.total}</p>
+                        <p>Online: ₹{revenue.online}</p>
+                        <p>Cash: ₹{revenue.cash}</p>
+                        <p>Total: ₹{revenue.total}</p>
                     </div>
                 ))}
             </div>

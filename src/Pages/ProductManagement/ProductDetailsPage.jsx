@@ -5,55 +5,12 @@ import {
     ChevronLeft,
     ChevronRight
 } from 'lucide-react';
+import dummyProducts from './dummyProducts ';
+import { useParams } from 'react-router-dom';
 
 const ProductDetailsPage = () => {
-    const [product, setProduct] = useState({
-        title: "Vanilla Ice Cream",
-        description: "Creamy vanilla ice cream made with real vanilla beans.",
-        images: ["https://i.pinimg.com/564x/f0/65/e4/f065e46e983f2fee9d8acff7977f6ec4.jpg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUdbkvIbm8d5Qb0QmA5iX6HxwhgGLhb8asiA&s", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdX0I_E8qkD1OqJsNMALLDd7QjMPii0lKM2Q&s", "https://shivamvastukala.com/wp-content/uploads/2022/09/IMG20220826155029-scaled.jpg"],
-        category: "Desserts",
-        variety: [
-            {
-                additionalDesc: {
-                    weigthInGrams: 500,
-                    size: "Tub",
-                },
-                stock: 30,
-                price: {
-                    mrp: 400,
-                    sellingPrice: 350,
-                },
-
-            },
-            {
-                additionalDesc: {
-                    weigthInGrams: 1000,
-                    size: "Family Pack",
-                },
-                stock: 20,
-                price: {
-                    mrp: 700,
-                    sellingPrice: 650,
-                },
-            },
-        ],
-        reviews: [
-            {
-                user: "Alice Johnson",
-                rating: 4,
-                comment: "Delicious and creamy!"
-            },
-            {
-                user: "Bob Smith",
-                rating: 5,
-                comment: "Best vanilla ice cream ever!"
-            }
-        ],
-        tag: ["ice cream", "vanilla", "dessert"],
-        active: true,
-        isDeleted: false,
-        sales: 120,
-    });
+    const {id} = useParams()
+    const [product, setProduct] = useState(dummyProducts[id]);
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -159,13 +116,13 @@ const ProductDetailsPage = () => {
 
     const handleNextImage = () => {
         setCurrentImageIndex((prev) =>
-            (prev + 1) % product.images.length
+            (prev + 1) % product.image.length
         );
     };
 
     const handlePrevImage = () => {
         setCurrentImageIndex((prev) =>
-            (prev - 1 + product.images.length) % product.images.length
+            (prev - 1 + product.image.length) % product.image.length
         );
     };
 
@@ -174,13 +131,13 @@ const ProductDetailsPage = () => {
             <div className="relative w-full h-96">
                 {/* Main Image */}
                 <img
-                    src={product?.images[currentImageIndex]}
+                    src={product?.image[currentImageIndex]}
                     alt={`${product.title} - Image ${currentImageIndex + 1}`}
                     className="w-full h-full object-cover rounded-lg"
                 />
 
                 {/* Navigation Buttons */}
-                {product.images.length > 1 && (
+                {product.image.length > 1 && (
                     <>
                         <button
                             onClick={handlePrevImage}
@@ -199,7 +156,7 @@ const ProductDetailsPage = () => {
 
                 {/* Image Indicators */}
                 <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2">
-                    {product.images.map((_, index) => (
+                    {product.image.map((_, index) => (
                         <button
                             key={index}
                             onClick={() => setCurrentImageIndex(index)}
@@ -439,10 +396,15 @@ const ProductDetailsPage = () => {
             {product.variety.map((variety, index) => (
                 <div key={index} className="border-b pb-3 mb-3">
                     <div className="flex justify-between">
+                        {
+                            variety.additionalDesc.size &&
                         <span className="font-medium">{variety.additionalDesc.size}</span>
+                        }
+                        { variety.additionalDesc.weigthInGrams &&
                         <span className="text-gray-600">
                             {variety.additionalDesc.weigthInGrams}g
                         </span>
+                        }
                     </div>
                     <div className="flex justify-between mt-2">
                         <div>

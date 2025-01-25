@@ -18,6 +18,7 @@ const ProductListingPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
 
+
     // Filtered and Searched Products
     const filteredProducts = useMemo(() => {
         return dummyProducts.filter(product => {
@@ -28,8 +29,8 @@ const ProductListingPage = () => {
             const matchesDeleted = filters.isDeleted === null || product.isDeleted === filters.isDeleted;
 
             const hasVarietyMeetingStockFilter = product.variety.some(variety =>
-                variety.additionalDesc.stock >= filters.minStock &&
-                variety.additionalDesc.stock <= filters.maxStock
+                variety.stock >= filters.minStock &&
+                variety.stock <= filters.maxStock
             );
 
             return matchesSearch &&
@@ -40,6 +41,7 @@ const ProductListingPage = () => {
                 hasVarietyMeetingStockFilter
         });
     }, [searchTerm, filters, dummyProducts]);
+
 
     // Pagination
     const paginatedProducts = useMemo(() => {
@@ -92,8 +94,8 @@ const ProductListingPage = () => {
 
             {/* Products Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {paginatedProducts.map(product => (
-                    <div onClick={()=>navigate(`/products/${product._id}`)} key={product.title} className="flex flex-col justify-between border p-4 rounded hover:shadow-lg hover:border-orange-500" >
+                {paginatedProducts.map((product, index) => (
+                    <div onClick={()=>navigate(`/products/${index}`)} key={product.title} className="flex flex-col justify-between border p-4 rounded hover:shadow-lg hover:border-orange-500" >
                         <img
                             src={product.image[0]}
                             alt={product.title}
@@ -117,7 +119,7 @@ const ProductListingPage = () => {
                                     <span>{variety.additionalDesc.size}</span>
                                     <span>{variety.additionalDesc.stock}</span>
                                     <span className="font-bold">
-                                        <strike className="text-red-500">₹{variety.additionalDesc.price.mrp + 50}</strike> ₹{variety.additionalDesc.price.sellingPrice}
+                                        <strike className="text-red-500">₹{variety.price.mrp}</strike> ₹{variety.price?.sellingPrice}
                                     </span>
                                 </div>
                             ))}

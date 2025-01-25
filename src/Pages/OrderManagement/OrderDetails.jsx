@@ -1,57 +1,11 @@
 import React, { useState } from "react";
+import orders from "./ordersDummyData";
+import { useParams } from "react-router-dom";
 
 const OrderDetails = () => {
   // Sample data
-  const [orderData, setOrderData] = useState({
-    products: [
-      {
-        product: {
-          title: "Wireless Mouse",
-          category: "Electronics",
-        },
-        productVariety: {
-          additionalDesc: {
-            weightInGrams: 150,
-            color: "Black",
-            size: "Medium",
-          },
-          stock: 50,
-          price: {
-            mrp: 1500,
-            sellingPrice: 1200,
-          },
-        },
-        quantity: 2,
-        totalPrice: 2400,
-      },
-    ],
-    user: {
-      name: "John Doe",
-      email: "john.doe@example.com",
-      phone: "1234567890",
-    },
-    address: {
-      flatNo: "101",
-      street: "Baker Street",
-      city: "London",
-      state: "London",
-      pincode: "NW16XE",
-      country: "UK",
-      category: "home",
-    },
-    totalAmount: 2400,
-    estimatedDeliveryDate: new Date("2025-02-01"),
-    description: "Order for a wireless mouse.",
-    status: "pending",
-    payment: {
-      status: "successful",
-      method: "Credit Card",
-    },
-    orderTrack: {
-      dateAndTime: new Date(),
-      location: "Warehouse",
-    },
-  });
+  const {id} = useParams()
+  const [orderData, setOrderData] = useState(orders[id]);
 
   // Handlers for updating fields
   const handleUpdate = (field, value) => {
