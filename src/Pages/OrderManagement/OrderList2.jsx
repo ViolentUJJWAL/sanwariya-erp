@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Check, Clock, Package, Archive, Download, ArrowLeftIcon, RefreshCwIcon, X, Eye } from 'lucide-react';
+import { Search, Check, Clock, Package, X, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ordersData from "./ordersDummyData";
 

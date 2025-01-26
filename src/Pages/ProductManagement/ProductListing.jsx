@@ -86,7 +86,7 @@ const ProductListingPage = () => {
                     Filters
                 </button>
                 <button className="text-xl ml-2 px-4 p-2 bg-orange-400 hover:bg-orange-500 text-white rounded"
-                    onClick={() => navigate("/add-product")}
+                    onClick={() => navigate("/products/add")}
                 >
                     Add Product
                 </button>

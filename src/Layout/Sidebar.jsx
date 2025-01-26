@@ -7,45 +7,41 @@ import {
   DollarSign,
   Users,
 } from "lucide-react";
-import {Link} from "react-router-dom"
+import {Link, useLocation} from "react-router-dom"
 
 const Sidebar = ({ isOpen, onToggle }) => {
+  const location = useLocation();
+
   const navItems = [
     {
       icon: Home,
       label: "Dashboard",
       href: "/dashboard",
-      color: "text-white-500",
     },
     {
       icon: Package,
       label: "Products",
       href: "/products",
-      color: "text-white-500",
     },
     {
       icon: ListOrdered,
       label: "Orders",
       href: "/orders",
-      color: "text-white-500",
     },
     {
       icon: DollarSign,
       label: "Transection",
       href: "/transactions",
-      color: "text-white-500",
     },
     {
       icon: Users,
       label: "Customers",
       href: "/customers",
-      color: "text-white-500",
     },
     {
       icon: MessageSquare,
       label: "Contact Us",
       href: "/contact-us",
-      color: "text-white-500",
     },
   ];
 
@@ -118,7 +114,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
         </button>
       </div>
 
-      <nav className="flex-grow px-4 py-6 space-y-2 overflow-y-auto">
+      <nav className="flex-grow px-2 py-6 space-y-2 overflow-y-auto">
         <ul className="space-y-2">
           {navItems.map((item) => (
             <li
@@ -129,6 +125,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
                 duration-300 
                 hover:bg-white/10
                 ${isOpen ? "px-3" : "px-2"}
+                ${location.pathname.startsWith(item.href) ? 'from-blue-500 to-blue-700' : ''}
               `}
             >
               <Link
@@ -138,14 +135,19 @@ const Sidebar = ({ isOpen, onToggle }) => {
                   items-center 
                   py-3 
                   ${isOpen ? "gap-4 justify-start" : "justify-center"}
+                  ${isOpen ? "px-5" : ""}
                   group
+                  ${location.pathname.startsWith(item.href) ? "bg-blue-600/20": 'opacity-80'}
+                  hover:opacity-100
+                  transition-all
+                  rounded-lg
                 `}
               >
                 <item.icon
                   className={`
                   h-6 
                   w-6 
-                  ${item.color} 
+                  text-white 
                   group-hover:scale-110 
                   transition
                 `}

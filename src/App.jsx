@@ -25,7 +25,7 @@ const App = () => {
         <Route path="/dashboard" element={<Layout> <Dashboard /> </Layout>} />
         <Route path="/products" element={<Layout> <ProductListingPage /> </Layout>} />
         <Route path="/products/:id" element={<Layout> <ProductDetailsPage /> </Layout>} />
-        <Route path="/add-product" element={<Layout> <AddProductPage /> </Layout>} />
+        <Route path="/products/add" element={<Layout> <AddProductPage /> </Layout>} />
         {/* <Route path="/orders" element={<Layout> <OrderManagementPage /> </Layout>} /> */}
         <Route path="/orders" element={<Layout> <OrderPage2 /> </Layout>} />
         <Route path="/orders/:id" element={<Layout> <OrderDetails/> </Layout>} />
