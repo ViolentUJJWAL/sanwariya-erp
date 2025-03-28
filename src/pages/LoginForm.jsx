@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import authService from "../services/authService";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/slice/userSlice";
 
 const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add login logic here
-    console.log('Login attempted', { email, password });
-    navigate('/dashboard');
+    console.log("Login attempted", { email, password });
+    try {
+      const signinResponse = await authService.signin({ email, password });
+      console.log("signinResponse", signinResponse);
+      if (signinResponse.token) {
+        dispatch(setUser({ user: signinResponse.user, token: signinResponse.token }));
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (

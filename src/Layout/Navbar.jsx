@@ -1,10 +1,25 @@
 import React, { useState } from "react";
 import { Search, Bell, Mail, User, ChevronDown } from "lucide-react";
-import {Link} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import authService from "../services/authService";
+import { clearUser } from "../store/slice/userSlice";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const handleLogOut = async () => {
+    try {
+      const res = await authService.signout();
+      console.log('res', res)
+      dispatch(clearUser());
+      navigate("/")
+    } catch (error) {
+      console.error("Signout failed:", error);
+    }
+  };
   return (
     <nav
       className="
@@ -143,7 +158,7 @@ const Navbar = () => {
             "
             />
             <div className="text-left">
-              <div className="text-sm font-medium">John Doe</div>
+              <div className="text-sm font-medium">{user?.name}</div>
               <div className="text-xs text-gray-500">Admin</div>
             </div>
             <ChevronDown
@@ -191,7 +206,7 @@ const Navbar = () => {
               </Link>
               <div className="border-t border-gray-200"></div>
               <Link
-                to="/"
+                onClick={handleLogOut}
                 className="
                 block 
                 px-4 

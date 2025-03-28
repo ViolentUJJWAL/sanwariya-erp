@@ -1,23 +1,53 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import authService from "../services/authService"; 
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [otpSent, setOtpSent] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSendOtp = (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
-    // Simulate OTP sending logic
-    console.log("OTP sent to:", email);
-    setOtpSent(true);
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await authService.sendOtp({ email });
+      if (response.message === "OTP sent successfully") {
+        setOtpSent(true);
+      }
+    } catch (err) {
+      setError(err.error || "Failed to send OTP. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleResetPassword = (e) => {
+  const handleResetPassword = async (e) => {
     e.preventDefault();
-    // Add password reset logic here
-    console.log("Password reset for:", email, "with OTP:", otp);
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await authService.verifyOtp({
+        email,
+        otp,
+        password: newPassword,
+      });
+      if (response.message === "Password reset successfully") {
+        // Redirect to login page after successful reset
+        navigate("/");
+      }
+    } catch (err) {
+      setError(err.error || "Invalid OTP or reset failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,6 +68,7 @@ const ForgotPasswordForm = () => {
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-3 mb-4 border-2 rounded-md border-orange-500 bg-white text-base focus:outline-none focus:ring-2 focus:ring-orange-500"
             required
+            disabled={loading}
           />
         ) : (
           <>
@@ -48,6 +79,7 @@ const ForgotPasswordForm = () => {
               onChange={(e) => setOtp(e.target.value)}
               className="w-full p-3 mb-4 border-2 rounded-md border-orange-500 bg-white text-base focus:outline-none focus:ring-2 focus:ring-orange-500"
               required
+              disabled={loading}
             />
             <input
               type="password"
@@ -56,15 +88,19 @@ const ForgotPasswordForm = () => {
               onChange={(e) => setNewPassword(e.target.value)}
               className="w-full p-3 mb-4 border-2 rounded-md border-orange-500 bg-white text-base focus:outline-none focus:ring-2 focus:ring-orange-500"
               required
+              disabled={loading}
             />
           </>
         )}
 
+        {error && <p className="mb-4 text-red-500 text-center">{error}</p>}
+
         <button
           type="submit"
-          className="w-full py-3 bg-orange-500 text-white uppercase rounded-md hover:bg-orange-600 transition-colors duration-300"
+          disabled={loading}
+          className="w-full py-3 bg-orange-500 text-white uppercase rounded-md hover:bg-orange-600 transition-colors duration-300 disabled:bg-orange-300"
         >
-          {!otpSent ? "Send OTP" : "Reset Password"}
+          {loading ? "Processing..." : !otpSent ? "Send OTP" : "Reset Password"}
         </button>
 
         <div className="mt-4 text-center">

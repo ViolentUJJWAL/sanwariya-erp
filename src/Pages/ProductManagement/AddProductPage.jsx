@@ -1,71 +1,58 @@
-import React, { useState } from 'react';
-import { X, Plus, Trash2, Tag, ImagePlus } from 'lucide-react';
+import React, { useState } from "react";
+import { X, Plus, Trash2, Tag, ImagePlus } from "lucide-react";
+import ProductService from "../../services/productService";
+import { useNavigate } from "react-router-dom";
 
 const AddProductPage = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
-  const [label, setLabel] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [label, setLabel] = useState("");
   const [images, setImages] = useState([]);
   const [tags, setTags] = useState([]);
-  const [currentTag, setCurrentTag] = useState('');
+  const [currentTag, setCurrentTag] = useState("");
   const [varieties, setVarieties] = useState([]);
-
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     const newImages = files.slice(0, 8 - images.length);
-    
-    const imagePromises = newImages.map(file => {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          resolve(reader.result);
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-
-    Promise.all(imagePromises).then(base64Images => {
-      setImages(prev => [...prev, ...base64Images]);
-    });
+    setImages((prev) => [...prev, ...newImages]); // Store File objects instead of base64
   };
 
   const removeImage = (index) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
+    setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleTagInput = (e) => {
     const value = e.target.value;
-    if (value.endsWith(' ') && currentTag.trim()) {
-      setTags(prev => [...prev, currentTag.trim()]);
-      setCurrentTag('');
+    if (value.endsWith(" ") && currentTag.trim()) {
+      setTags((prev) => [...prev, currentTag.trim()]);
+      setCurrentTag("");
     } else {
       setCurrentTag(value);
     }
   };
 
   const removeTag = (index) => {
-    setTags(prev => prev.filter((_, i) => i !== index));
+    setTags((prev) => prev.filter((_, i) => i !== index));
   };
 
   const addVariety = () => {
-    setVarieties(prev => [...prev, {
-      additionalDesc: {
-        weightInGrams: '',
-        color: '',
-        size: ''
+    setVarieties((prev) => [
+      ...prev,
+      {
+        additionalDesc: { weightInGrams: "", color: "", size: "" },
+        stock: "",
+        price: { mrp: "", sellingPrice: "" },
       },
-      stock: '',
-      price: {
-        mrp: '',
-        sellingPrice: ''
-      }
-    }]);
+    ]);
   };
 
   const updateVariety = (index, field, value) => {
     const newVarieties = [...varieties];
-    const keys = field.split('.');
+    const keys = field.split(".");
     if (keys.length === 1) {
       newVarieties[index][field] = value;
     } else {
@@ -75,24 +62,69 @@ const AddProductPage = () => {
   };
 
   const removeVariety = (index) => {
-    setVarieties(prev => prev.filter((_, i) => i !== index));
+    setVarieties((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Implement product submission logic
-    console.log({
-      title, description, category, label, 
-      images, tags, varieties
-    });
+    setLoading(true);
+    setError(null);
+
+    // Convert numeric fields to numbers in varieties
+    const formattedVarieties = varieties.map((variety) => ({
+      additionalDesc: {
+        weightInGrams: variety.additionalDesc.weightInGrams
+          ? Number(variety.additionalDesc.weightInGrams)
+          : "",
+        color: variety.additionalDesc.color,
+        size: variety.additionalDesc.size,
+      },
+      stock: variety.stock ? Number(variety.stock) : "",
+      price: {
+        mrp: variety.price.mrp ? Number(variety.price.mrp) : "",
+        sellingPrice: variety.price.sellingPrice
+          ? Number(variety.price.sellingPrice)
+          : "",
+      },
+    }));
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("category", category);
+    formData.append("labels", JSON.stringify([label])); // API expects an array
+    formData.append("tags", JSON.stringify(tags));
+    formData.append("variety", JSON.stringify(formattedVarieties)); // Send formatted varieties
+
+    images.forEach((image) => formData.append("images", image));
+
+    try {
+      const response = await ProductService.createProduct(formData);
+      console.log("Product created:", response);
+      // Reset form or redirect as needed
+      setTitle("");
+      setDescription("");
+      setCategory("");
+      setLabel("");
+      setImages([]);
+      setTags([]);
+      setVarieties([]);
+
+      navigate(-1);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="mx-auto">
       <form onSubmit={handleSubmit} className="space-y-6">
         <h2 className="text-4xl font-bold my-4 mb-4">Add New Product</h2>
-        
-        {/* Basic Product Details */}
+
+        {error && <div className="text-red-500">{error}</div>}
+
         <div className="grid md:grid-cols-2 gap-4">
           <input
             type="text"
@@ -101,12 +133,14 @@ const AddProductPage = () => {
             onChange={(e) => setTitle(e.target.value)}
             className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-300"
             required
+            disabled={loading}
           />
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-300"
             required
+            disabled={loading}
           >
             <option value="">Select Category</option>
             <option value="electronics">Electronics</option>
@@ -122,6 +156,7 @@ const AddProductPage = () => {
           className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-300"
           rows={4}
           required
+          disabled={loading}
         />
 
         <select
@@ -129,6 +164,7 @@ const AddProductPage = () => {
           onChange={(e) => setLabel(e.target.value)}
           className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-300"
           required
+          disabled={loading}
         >
           <option value="">Select Label</option>
           <option value="best seller">Best Seller</option>
@@ -136,7 +172,6 @@ const AddProductPage = () => {
           <option value="trending">Trending</option>
         </select>
 
-        {/* Image Upload */}
         <div>
           <div className="flex items-center gap-2 mb-2">
             <ImagePlus className="text-orange-600" />
@@ -145,15 +180,16 @@ const AddProductPage = () => {
           <div className="flex flex-wrap gap-2 mb-2">
             {images.map((image, index) => (
               <div key={index} className="relative">
-                <img 
-                  src={image} 
-                  alt={`Product ${index + 1}`} 
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt={`Product ${index + 1}`}
                   className="w-24 h-24 object-cover rounded"
                 />
                 <button
                   type="button"
                   onClick={() => removeImage(index)}
                   className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                  disabled={loading}
                 >
                   <X size={16} />
                 </button>
@@ -164,19 +200,19 @@ const AddProductPage = () => {
                 <div className="w-24 h-24 border-2 border-dashed border-orange-500 flex items-center justify-center rounded">
                   <Plus className="text-orange-700" />
                 </div>
-                <input 
-                  type="file" 
-                  multiple 
+                <input
+                  type="file"
+                  multiple
                   accept="image/*"
                   onChange={handleImageUpload}
                   className="hidden"
+                  disabled={loading}
                 />
               </label>
             )}
           </div>
         </div>
 
-        {/* Tags */}
         <div>
           <div className="flex items-center gap-2 mb-2">
             <Tag className="text-orange-600" />
@@ -189,17 +225,19 @@ const AddProductPage = () => {
               onChange={handleTagInput}
               placeholder="Type tag and press space"
               className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-300"
+              disabled={loading}
             />
             {tags.map((tag, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="bg-orange-100 px-2 py-1 rounded flex items-center gap-1"
               >
                 {tag}
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={() => removeTag(index)}
                   className="text-red-500"
+                  disabled={loading}
                 >
                   <X size={16} />
                 </button>
@@ -208,7 +246,6 @@ const AddProductPage = () => {
           </div>
         </div>
 
-        {/* Product Varieties */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
@@ -219,20 +256,22 @@ const AddProductPage = () => {
               type="button"
               onClick={addVariety}
               className="bg-orange-500 text-white px-3 py-1 rounded flex items-center gap-1"
+              disabled={loading}
             >
               <Plus size={16} /> Add Variety
             </button>
           </div>
 
           {varieties.map((variety, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="bg-orange-50 border border-orange-200 p-4 rounded mb-4 relative"
             >
               <button
                 type="button"
                 onClick={() => removeVariety(index)}
                 className="absolute top-2 right-2 text-red-500"
+                disabled={loading}
               >
                 <Trash2 size={20} />
               </button>
@@ -241,55 +280,77 @@ const AddProductPage = () => {
                   type="number"
                   placeholder="Weight (grams)"
                   value={variety.additionalDesc.weightInGrams}
-                  onChange={(e) => updateVariety(index, 'additionalDesc.weightInGrams', e.target.value)}
+                  onChange={(e) =>
+                    updateVariety(
+                      index,
+                      "additionalDesc.weightInGrams",
+                      e.target.value
+                    )
+                  }
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-300"
+                  disabled={loading}
                 />
                 <input
                   type="text"
                   placeholder="Color"
                   value={variety.additionalDesc.color}
-                  onChange={(e) => updateVariety(index, 'additionalDesc.color', e.target.value)}
+                  onChange={(e) =>
+                    updateVariety(index, "additionalDesc.color", e.target.value)
+                  }
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-300"
+                  disabled={loading}
                 />
                 <input
                   type="text"
                   placeholder="Size"
                   value={variety.additionalDesc.size}
-                  onChange={(e) => updateVariety(index, 'additionalDesc.size', e.target.value)}
+                  onChange={(e) =>
+                    updateVariety(index, "additionalDesc.size", e.target.value)
+                  }
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-300"
+                  disabled={loading}
                 />
                 <input
                   type="number"
                   placeholder="Stock"
                   value={variety.stock}
-                  onChange={(e) => updateVariety(index, 'stock', e.target.value)}
+                  onChange={(e) =>
+                    updateVariety(index, "stock", e.target.value)
+                  }
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-300"
+                  disabled={loading}
                 />
                 <input
                   type="number"
                   placeholder="MRP"
                   value={variety.price.mrp}
-                  onChange={(e) => updateVariety(index, 'price.mrp', e.target.value)}
+                  onChange={(e) =>
+                    updateVariety(index, "price.mrp", e.target.value)
+                  }
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-300"
+                  disabled={loading}
                 />
                 <input
                   type="number"
                   placeholder="Selling Price"
                   value={variety.price.sellingPrice}
-                  onChange={(e) => updateVariety(index, 'price.sellingPrice', e.target.value)}
+                  onChange={(e) =>
+                    updateVariety(index, "price.sellingPrice", e.target.value)
+                  }
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-300"
+                  disabled={loading}
                 />
               </div>
             </div>
           ))}
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-orange-600 text-white py-3 rounded hover:bg-orange-700 transition duration-300"
+          disabled={loading}
         >
-          Add Product
+          {loading ? "Adding Product..." : "Add Product"}
         </button>
       </form>
     </div>
