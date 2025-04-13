@@ -123,38 +123,80 @@ const ProductDetailsPage = () => {
   const removeVariety = (index) => {
     setEditVarieties((prev) => prev.filter((_, i) => i !== index));
   };
+
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-        const formData = new FormData();
-        
-        // Ensure all required fields are properly appended
-        formData.append('title', editTitle || product.title);
-        formData.append('description', editDescription || product.description);
-        formData.append('category', editCategory || product.category);
-        // Ensure variety is always an array, even if empty
-        formData.append('variety', JSON.stringify(editVarieties.length > 0 ? editVarieties : product.variety));
-        
-        // Optional fields
-        formData.append('labels', JSON.stringify([editLabel].filter(Boolean)));
-        formData.append('tags', JSON.stringify(editTags.length > 0 ? editTags : product.tags));
+      const formData = new FormData();
 
-        // Handle image uploads
-        const newImages = editImages.filter(img => img.startsWith('data:'));
-        if (newImages.length > 0) {
-            for (let i = 0; i < newImages.length; i++) {
-                const blob = await (await fetch(newImages[i])).blob();
-                formData.append('images', blob, `image-${i}.jpg`);
+      // Append required fields (ensuring default values)
+      formData.append("title", editTitle || product.title);
+      formData.append("description", editDescription || product.description);
+      formData.append("category", editCategory || product.category);
+
+      // Append 'variety' (array of objects)
+      if (editVarieties.length > 0) {
+        editVarieties.forEach((variety, index) => {
+          Object.keys(variety).forEach((key) => {
+            if (typeof variety[key] === "object" && variety[key] !== null) {
+              Object.keys(variety[key]).forEach((subKey) => {
+                formData.append(
+                  `variety[${index}][${key}][${subKey}]`,
+                  variety[key][subKey]
+                );
+              });
+            } else {
+              formData.append(`variety[${index}][${key}]`, variety[key]);
             }
-        }
+          });
+        });
+      }
 
-        const updatedProduct = await ProductService.updateProduct(id, formData);
-        setProduct(updatedProduct.data);
+      // Append 'labels' (array)
+      if (editLabel) {
+        formData.append("labels[]", editLabel);
+      } else if (product.labels) {
+        product.labels.forEach((label) => formData.append("labels[]", label));
+      }
+
+      // Append 'tags' (array)
+      if (editTags.length > 0) {
+        editTags.forEach((tag) => formData.append("tags[]", tag));
+      } else if (product.tags) {
+        product.tags.forEach((tag) => formData.append("tags[]", tag));
+      }
+
+      // Preserve existing images & handle new image uploads
+      const newImages = editImages.filter((img) => img.startsWith("data:")); // New base64 images
+      const existingImages = editImages.filter(
+        (img) => !img.startsWith("data:")
+      ); // Already uploaded images
+
+      // Append existing image URLs to preserve them
+      existingImages.forEach((img) => {
+        formData.append("existingImages[]", img);
+      });
+
+      // Convert base64 images to blob and append them
+      for (let i = 0; i < newImages.length; i++) {
+        const blob = await (await fetch(newImages[i])).blob();
+        formData.append("images", blob, `image-${i}.jpg`);
+      }
+
+      // Call API
+      const response = await ProductService.updateProduct(id, formData);
+
+      if (response && response.success) {
+        setProduct(response.data); // Ensure correct response structure
         setIsEditing(false);
+      } else {
+        throw new Error(response?.message || "Failed to update product");
+      }
     } catch (err) {
-        setError(err.message);
+      console.error("Error updating product:", err);
+      setError(err.message);
     }
-};
+  };
 
   const handleToggleActive = async () => {
     try {

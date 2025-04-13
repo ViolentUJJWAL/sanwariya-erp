@@ -5,7 +5,6 @@ import Dashboard from "./Pages/Dashboard";
 import ForgotPasswordForm from "./Pages/ForgotPasswordForm";
 import ContactUsAdminPanel from "./Pages/ContactUsAdminPanel";
 import ProductListingPage from "./pages/ProductManagement/ProductListing";
-import OrderManagementPage from "./pages/OrderManagement/OrderList";
 import TransactionManagement from "./pages/TransectionManagement/TransactionManagement";
 import CustomerList from "./pages/CustomerManagement/CustomerList";
 import AddProductPage from "./pages/ProductManagement/AddProductPage";
@@ -17,6 +16,10 @@ import LoginForm from "./Pages/LoginForm";
 import ProfilePage from "./Pages/Profile";
 import { fetchUser } from "./store/slice/userSlice";
 import { useDispatch } from "react-redux";
+import CouponsTable from "./Pages/Coupons/CouponsTable";
+import AddCouponForm from "./Pages/Coupons/AddCouponForm";
+import UpdateCouponForm from "./Pages/Coupons/UpdateCouponForm";
+import UserDetail from "./Pages/CustomerManagement/UserDetail";
 
 const App = () => {
 
@@ -103,6 +106,33 @@ const App = () => {
           }
         />
         <Route
+          path="/coupons"
+          element={
+            <Layout>
+              {" "}
+              <CouponsTable />{" "}
+            </Layout>
+          }
+        />
+        <Route
+          path="/coupons-add"
+          element={
+            <Layout>
+              {" "}
+              <AddCouponForm />{" "}
+            </Layout>
+          }
+        />
+        <Route
+          path="/coupons-edit/:id"
+          element={
+            <Layout>
+              {" "}
+              <UpdateCouponForm />{" "}
+            </Layout>
+          }
+        />
+        <Route
           path="/transactions"
           element={
             <Layout>
@@ -126,6 +156,15 @@ const App = () => {
             <Layout>
               {" "}
               <CustomerList />
+            </Layout>
+          }
+        />
+        <Route
+          path="/customers/:id"
+          element={
+            <Layout>
+              {" "}
+              <UserDetail />
             </Layout>
           }
         />

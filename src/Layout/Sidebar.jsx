@@ -6,6 +6,7 @@ import {
   ListOrdered,
   DollarSign,
   Users,
+  Ticket,
 } from "lucide-react";
 import {Link, useLocation} from "react-router-dom"
 
@@ -27,6 +28,11 @@ const Sidebar = ({ isOpen, onToggle }) => {
       icon: ListOrdered,
       label: "Orders",
       href: "/orders",
+    },
+    {
+      icon: Ticket,
+      label: "Coupon",
+      href: "/coupons",
     },
     {
       icon: DollarSign,

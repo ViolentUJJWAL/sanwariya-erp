@@ -3,6 +3,36 @@ import { Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ProductService from "../../services/productService";
 
+const SearchInput = ({ onSearch, loading }) => {
+  const [localSearchTerm, setLocalSearchTerm] = useState("");
+
+  const handleBlur = () => {
+    onSearch(localSearchTerm); // Trigger search when input loses focus
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      onSearch(localSearchTerm); // Trigger search on Enter key
+    }
+  };
+
+  return (
+    <div className="relative flex-grow">
+      <input
+        type="text"
+        placeholder="Search products..."
+        value={localSearchTerm}
+        onChange={(e) => setLocalSearchTerm(e.target.value)}
+        onBlur={handleBlur}
+        onKeyPress={handleKeyPress}
+        className="w-full p-2 pl-8 border-1 border-orange-500 rounded-lg ring-2 ring-orange-500 focus:outline-none"
+        disabled={loading}
+      />
+      <Search className="absolute left-2 top-3 text-gray-400" size={20} />
+    </div>
+  );
+};
+
 const ProductListingPage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,6 +53,7 @@ const ProductListingPage = () => {
   const itemsPerPage = 6;
 
   useEffect(() => {
+    console.log("gghhh");
     fetchProducts();
   }, [currentPage, filters, searchTerm]);
 
@@ -37,7 +68,7 @@ const ProductListingPage = () => {
         label: filters.label || undefined,
         active: filters.active,
         isDeleted: filters.isDeleted,
-        title: searchTerm || undefined, // Assuming API supports title search
+        search: searchTerm || undefined, // Changed 'title' to 'search' parameter name
       };
       const response = await ProductService.getAllProducts(params);
       console.log("response.data", response.data);
@@ -61,48 +92,42 @@ const ProductListingPage = () => {
           ? value === "true"
           : value,
     }));
-    setCurrentPage(1); // Reset to first page on filter change
+    setCurrentPage(1);
   };
 
-  // Get unique categories and labels from fetched products
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    setCurrentPage(1);
+  };
+
   const categories = [...new Set(products.map((p) => p.category))];
-  const labels = [...new Set(products.map((p) => p.labels?.[0]))]; // Assuming labels is an array
+  const labels = [...new Set(products.map((p) => p.labels?.[0]))];
 
   return (
     <div className="container mx-auto">
       <h1 className="text-4xl font-bold my-4">Product Management</h1>
       <div className="flex justify-between mb-4">
-        <div className="relative flex-grow w-1/2">
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-            }}
-            className="w-full p-2 pl-8 border-1 border-orange-500 rounded-lg ring-2 ring-orange-500 focus:outline-none"
-            disabled={loading}
-          />
-          <Search className="absolute left-2 top-3 text-gray-400" size={20} />
-        </div>
-        <button
-          onClick={() => setIsFilterModalOpen(true)}
-          className="text-xl ml-2 px-4 p-2 bg-orange-500 text-white rounded"
-          disabled={loading}
-        >
-          Filters
-        </button>
-        <button
-          className="text-xl ml-2 px-4 p-2 bg-orange-400 hover:bg-orange-500 text-white rounded"
-          onClick={() => navigate("/products/add")}
-          disabled={loading}
-        >
-          Add Product
-        </button>
-      </div>
+  <div className="flex items-center space-x-4 w-full max-w-md">
+    {/* <SearchInput onSearch={handleSearch} loading={loading} /> */}
+    <button
+      onClick={() => setIsFilterModalOpen(true)}
+      className="text-xl ml-2 px-4 p-2 bg-orange-500 text-white rounded"
+      disabled={loading}
+    >
+      Filters
+    </button>
+  </div>
+  <button
+    className="text-xl ml-2 px-4 p-2 bg-orange-400 hover:bg-orange-500 text-white rounded"
+    onClick={() => navigate("/products/add")}
+    disabled={loading}
+  >
+    Add Product
+  </button>
+</div>
 
       {error && <div className="text-red-500 mb-4">{error}</div>}
-      {loading && <div className="text-center">Loading...</div>}
+      {/* {loading && <div className="text-center">Loading...</div>} */}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {products.map((product) => (
